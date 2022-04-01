@@ -38,7 +38,7 @@ public class MatchService {
 
         Match match = new Match();
         match.setMatchId(null);
-        match.setMatchTime(addMatchRequestBody.getTime());
+        match.setMatchTime(new Date());
         match.setAttendances(attendancesSb.toString());
         matchMapper.insertMatch(match);
 
@@ -87,6 +87,7 @@ public class MatchService {
         List<GetUserMatchModel> result = new ArrayList<>();
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        endTime = addOneDay(endTime);
         List<Match> matches = matchMapper.selectMatchByStartTimeAndEndTime(formatter.format(startTime), formatter.format(endTime));
         List<User> allUsers = userService.getAllUser();
 
@@ -115,5 +116,12 @@ public class MatchService {
             result.add(getUserMatchModel);
         }
         return result;
+    }
+
+    private Date addOneDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        return c.getTime();
     }
 }
