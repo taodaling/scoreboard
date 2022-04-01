@@ -30,6 +30,8 @@ public class MatchService {
     UserService userService;
 
     public void addMatch(AddMatchRequestBody addMatchRequestBody) {
+        Date now = new Date();
+
         StringBuilder attendancesSb = new StringBuilder();
         for (AddMatchRequestModel model : addMatchRequestBody.getAddMatchRequestModels()) {
             attendancesSb.append(model.getUserId()).append("|");
@@ -38,11 +40,11 @@ public class MatchService {
 
         Match match = new Match();
         match.setMatchId(null);
-        match.setMatchTime(new Date());
+        match.setMatchTime(now);
         match.setAttendances(attendancesSb.toString());
         matchMapper.insertMatch(match);
 
-        match = matchMapper.selectMatchByTime(addMatchRequestBody.getTime()).get(0);
+        match = matchMapper.selectMatchByTime(now).get(0);
 
         for (AddMatchRequestModel model : addMatchRequestBody.getAddMatchRequestModels()) {
             Usermatch usermatch = new Usermatch();
