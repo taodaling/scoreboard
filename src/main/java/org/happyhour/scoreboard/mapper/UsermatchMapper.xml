@@ -9,4 +9,31 @@
         id,userId,matchId,role,score
     </sql>
 
+    <resultMap id="baseResultMap" type="org.happyhour.scoreboard.model.Usermatch">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="matchId" property="matchId" jdbcType="INTEGER"/>
+        <result column="role" property="role" jdbcType="INTEGER"/>
+        <result column="score" property="score" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insertUsermatch">
+        INSERT INTO UserMatch(userId,matchId,role,score) VALUES(#{userId},#{matchId},#{role},#{score})
+    </insert>
+
+    <select id="selectUsermatchByUserId" resultMap="baseResultMap">
+        SELECT * FROM UserMatch
+        WHERE userId = #{userId};
+    </select>
+
+    <select id="selectUsermatchByMatchId" resultMap="baseResultMap">
+        SELECT * FROM UserMatch
+        WHERE matchId = #{matchId};
+    </select>
+
+    <select id="selectUsermatchByUserIdAndMatchId" resultMap="baseResultMap">
+        SELECT * FROM UserMatch
+        WHERE userId = #{userId} AND matchId = #{matchId};
+    </select>
+
 </mapper>

@@ -4,6 +4,9 @@ import org.happyhour.scoreboard.model.Match;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * (Match)数据Mapper
  *
@@ -14,4 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MatchMapper extends BaseMapper<Match> {
 
+    void insertMatch(Match match);
+
+    List<Match> selectMatchByTime(Date matchTime);
+
+    List<Match> selectMatchByStartTimeAndEndTime(String startTime, String endTime);
 }

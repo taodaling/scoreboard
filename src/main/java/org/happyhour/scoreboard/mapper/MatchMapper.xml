@@ -2,11 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.happyhour.scoreboard.mapper.MatchMapper">
     <sql id="tableName">
-        Match
+        Matchs
     </sql>
 
     <sql id="baseColumn">
-        matchId,time,attendances
+        matchId,matchTime,attendances
     </sql>
+
+    <resultMap id="baseResultMap" type="org.happyhour.scoreboard.model.Match">
+        <result column="matchId" property="matchId" jdbcType="INTEGER"/>
+        <result column="matchTime" property="matchTime" jdbcType="TIMESTAMP"/>
+        <result column="attendances" property="attendances" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertMatch">
+        INSERT INTO Matchs(matchTime,attendances) VALUES(#{matchTime},#{attendances})
+    </insert>
+
+    <select id="selectMatchByTime" resultMap="baseResultMap">
+        SELECT * FROM Matchs
+        WHERE matchTime = #{matchTime};
+    </select>
+
+    <select id="selectMatchByStartTimeAndEndTime" resultMap="baseResultMap">
+        SELECT * FROM Matchs
+        WHERE <![CDATA[
+                    matchTime >= #{startTime}
+                    AND matchTime <= #{endTime}
+            ]]>;
+    </select>
 
 </mapper>

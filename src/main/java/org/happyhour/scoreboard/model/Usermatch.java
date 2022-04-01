@@ -1,6 +1,8 @@
 package org.happyhour.scoreboard.model;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -30,11 +32,13 @@ public class Usermatch extends Model<Usermatch> implements Serializable {
     /**
      * userid
      */
-    private Integer userid;
+    @TableField("userId")
+    private Integer userId;
     /**
      * matchid
      */
-    private Integer matchid;
+    @TableField("matchId")
+    private Integer matchId;
     /**
      * role
      */
