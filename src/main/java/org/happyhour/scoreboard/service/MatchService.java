@@ -1,20 +1,29 @@
 package org.happyhour.scoreboard.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.happyhour.scoreboard.controller.requestBody.AddMatchRequestBody;
-import org.happyhour.scoreboard.enums.RoleEnum;
 import org.happyhour.scoreboard.enums.ScoreEnum;
 import org.happyhour.scoreboard.mapper.MatchMapper;
 import org.happyhour.scoreboard.mapper.UserMapper;
 import org.happyhour.scoreboard.mapper.UsermatchMapper;
-import org.happyhour.scoreboard.model.*;
+import org.happyhour.scoreboard.model.AddMatchRequestModel;
+import org.happyhour.scoreboard.model.GetUserMatchModel;
+import org.happyhour.scoreboard.model.Match;
+import org.happyhour.scoreboard.model.RankModel;
+import org.happyhour.scoreboard.model.User;
+import org.happyhour.scoreboard.model.Usermatch;
 import org.happyhour.scoreboard.util.BizException;
+import org.happyhour.scoreboard.util.Context;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class MatchService {
@@ -31,6 +40,9 @@ public class MatchService {
 
     public void addMatch(AddMatchRequestBody addMatchRequestBody) {
         Date now = new Date();
+
+        //only admin
+        Context.assertIsAdmin();
 
         StringBuilder attendancesSb = new StringBuilder();
         for (AddMatchRequestModel model : addMatchRequestBody.getAddMatchRequestModels()) {
