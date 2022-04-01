@@ -31,7 +31,7 @@ public class MatchController {
     }
 
     @RequestMapping(value = "/user/match", method = RequestMethod.GET)
-    public Result<List<GetUserMatchModel>> getUserMatch(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
+    public Result<List<GetUserMatchModel>> getUserMatch(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
         return Result.ofSuccess(matchService.getUserMatch(startTime, endTime));
     }
 }

@@ -38,6 +38,8 @@ public class MatchService {
     UserService userService;
 
     public void addMatch(AddMatchRequestBody addMatchRequestBody) {
+        Date now = new Date();
+
         //only admin
         Context.assertIsAdmin();
 
@@ -49,11 +51,11 @@ public class MatchService {
 
         Match match = new Match();
         match.setMatchId(null);
-        match.setMatchTime(addMatchRequestBody.getTime());
+        match.setMatchTime(now);
         match.setAttendances(attendancesSb.toString());
         matchMapper.insertMatch(match);
 
-        match = matchMapper.selectMatchByTime(addMatchRequestBody.getTime()).get(0);
+        match = matchMapper.selectMatchByTime(now).get(0);
 
         for (AddMatchRequestModel model : addMatchRequestBody.getAddMatchRequestModels()) {
             Usermatch usermatch = new Usermatch();
@@ -98,6 +100,7 @@ public class MatchService {
         List<GetUserMatchModel> result = new ArrayList<>();
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        endTime = addOneDay(endTime);
         List<Match> matches = matchMapper.selectMatchByStartTimeAndEndTime(formatter.format(startTime), formatter.format(endTime));
         List<User> allUsers = userService.getAllUser();
 
@@ -126,5 +129,12 @@ public class MatchService {
             result.add(getUserMatchModel);
         }
         return result;
+    }
+
+    private Date addOneDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        return c.getTime();
     }
 }
