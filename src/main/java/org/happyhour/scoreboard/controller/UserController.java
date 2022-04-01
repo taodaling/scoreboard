@@ -3,9 +3,14 @@ package org.happyhour.scoreboard.controller;
 import org.happyhour.scoreboard.model.User;
 import org.happyhour.scoreboard.service.UserService;
 import org.happyhour.scoreboard.util.BizException;
+import org.happyhour.scoreboard.util.Context;
 import org.happyhour.scoreboard.util.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,6 +40,11 @@ public class UserController {
             throw new BizException("id can't be assigned with null value");
         }
         return Result.ofSuccess(userService.getUser(id));
+    }
+
+    @RequestMapping(value = "/self", method = RequestMethod.GET)
+    public Result<User> getSelf() {
+        return Result.ofSuccess(userService.getUser(Context.getNotNullUser()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)

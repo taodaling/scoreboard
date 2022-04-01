@@ -3,6 +3,8 @@ package org.happyhour.scoreboard.util;
 import lombok.Data;
 import org.happyhour.scoreboard.model.User;
 
+import java.util.Objects;
+
 @Data
 public class Context {
     @Data
@@ -17,6 +19,11 @@ public class Context {
         Integer user = tl.get().userId;
         BizException.assertTrue(user != null, "auth required");
         return user;
+    }
+
+    public static void assertIsAdmin() {
+        Integer user = tl.get().userId;
+        BizException.assertTrue(Objects.equals(user, 0), "only admin is allowed to operate");
     }
 
     public static Holder get() {
