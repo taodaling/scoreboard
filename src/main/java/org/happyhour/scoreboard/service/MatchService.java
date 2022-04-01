@@ -103,7 +103,7 @@ public class MatchService {
                     absentUsermatch.setUserId(user.getUserid());
                     absentUsermatch.setMatchId(match.getMatchId());
                     absentUsermatch.setScore(ScoreEnum.ABSENT.id);
-                    absentUsermatch.setRole(RoleEnum.ABSENT.id);
+                    absentUsermatch.setRole(null);
 
                     resultUserMatches.add(absentUsermatch);
                     usermatchMapper.insertUsermatch(absentUsermatch);
