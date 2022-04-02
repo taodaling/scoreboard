@@ -19,9 +19,8 @@
         INSERT INTO Matchs(matchTime,attendances) VALUES(#{matchTime},#{attendances})
     </insert>
 
-    <select id="selectMatchByTime" resultMap="baseResultMap">
-        SELECT * FROM Matchs
-        WHERE matchTime = #{matchTime};
+    <select id="selectNewestMatch" resultMap="baseResultMap">
+        SELECT * FROM Matchs ORDER BY matchTime DESC LIMIT 1
     </select>
 
     <select id="selectMatchByStartTimeAndEndTime" resultMap="baseResultMap">

@@ -19,7 +19,7 @@ public interface MatchMapper extends BaseMapper<Match> {
 
     void insertMatch(Match match);
 
-    List<Match> selectMatchByTime(Date matchTime);
+    List<Match> selectNewestMatch();
 
     List<Match> selectMatchByStartTimeAndEndTime(String startTime, String endTime);
 }

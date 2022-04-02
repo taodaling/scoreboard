@@ -40,7 +40,6 @@ public class MatchService {
 
     public void addMatch(AddMatchRequestBody addMatchRequestBody) {
         Date now = new Date();
-
         //only admin
         Context.assertIsAdmin();
 
@@ -56,7 +55,7 @@ public class MatchService {
         match.setAttendances(attendancesSb.toString());
         matchMapper.insertMatch(match);
 
-        match = matchMapper.selectMatchByTime(now).get(0);
+        match = matchMapper.selectNewestMatch().get(0);
 
         for (AddMatchRequestModel model : addMatchRequestBody.getAddMatchRequestModels()) {
             Usermatch usermatch = new Usermatch();
