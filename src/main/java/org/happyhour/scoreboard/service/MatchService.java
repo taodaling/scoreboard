@@ -1,5 +1,9 @@
 package org.happyhour.scoreboard.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import de.gesundkrank.jskills.Rating;
+import de.gesundkrank.jskills.TrueSkillCalculator;
+import org.happyhour.scoreboard.algo.TrueSkillAlgorithm;
 import org.happyhour.scoreboard.controller.requestBody.AddMatchRequestBody;
 import org.happyhour.scoreboard.enums.ScoreEnum;
 import org.happyhour.scoreboard.mapper.MatchMapper;
@@ -21,11 +25,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchService {
@@ -74,25 +82,37 @@ public class MatchService {
     private Function<int[], Integer> scoreAlgorithm;
     @Resource
     private Function<int[], Integer> inverseRatingAlgorithm;
+    @Resource
+    private TrueSkillAlgorithm trueSkillAlgorithm;
 
     public List<RankModel> getRank() {
         List<User> allUsers = userService.getAllUser();
         List<RankModel> result = new ArrayList<RankModel>();
+        List<Usermatch> allMatch = usermatchMapper.selectList(new QueryWrapper<>());
+        Map<Integer, List<Usermatch>> groupMatchByMatchId = allMatch.stream()
+                .collect(Collectors.groupingBy(x -> x.getMatchId()));
+        Map<Integer, List<Usermatch>> groupMatchByUserId = allMatch.stream()
+                .collect(Collectors.groupingBy(x -> x.getUserId()));
+        Map<Integer, Double> ratings = trueSkillAlgorithm.calcRating(new TreeMap<>(groupMatchByMatchId).values());
+
 
         for (User user : allUsers) {
             RankModel rankModel = new RankModel();
             rankModel.setUserId(user.getUserid());
 
-            HashMap<String, Object> conditionMap = new HashMap<String, Object>();
-            conditionMap.put("userId", user.getUserid());
-            List<Usermatch> usermatches = usermatchMapper.selectByMap(conditionMap);
+//            HashMap<String, Object> conditionMap = new HashMap<String, Object>();
+//            conditionMap.put("userId", user.getUserid());
+            List<Usermatch> usermatches = groupMatchByUserId.getOrDefault(user.getUserid(), Collections.emptyList());//usermatchMapper.selectByMap(conditionMap);
             //newest first
             usermatches.sort(Comparator.comparingInt(match -> -match.getMatchId()));
             int[] scores = usermatches.stream().mapToInt(x -> x.getScore()).toArray();
             rankModel.setTotalScore(scoreAlgorithm.apply(scores));
             rankModel.setRating(inverseRatingAlgorithm.apply(scores));
+            rankModel.setTrueSkill((int)Math.round(ratings.getOrDefault(user.getUserid(), 0D)));
             result.add(rankModel);
         }
+
+
 
         result.sort(new Comparator<RankModel>() {
             @Override

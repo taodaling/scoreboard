@@ -10,4 +10,6 @@ public class RankModel {
     private Integer totalScore;
 
     private Integer rating;
+
+    private Integer trueSkill;
 }
