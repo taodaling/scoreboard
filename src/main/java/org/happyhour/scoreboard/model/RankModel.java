@@ -8,4 +8,6 @@ public class RankModel {
     private Integer userId;
 
     private Integer totalScore;
+
+    private Integer rating;
 }

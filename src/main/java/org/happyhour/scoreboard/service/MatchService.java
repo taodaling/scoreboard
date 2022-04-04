@@ -19,11 +19,13 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 public class MatchService {
@@ -68,6 +70,11 @@ public class MatchService {
         }
     }
 
+    @Resource
+    private Function<int[], Integer> scoreAlgorithm;
+    @Resource
+    private Function<int[], Integer> inverseRatingAlgorithm;
+
     public List<RankModel> getRank() {
         List<User> allUsers = userService.getAllUser();
         List<RankModel> result = new ArrayList<RankModel>();
@@ -79,9 +86,11 @@ public class MatchService {
             HashMap<String, Object> conditionMap = new HashMap<String, Object>();
             conditionMap.put("userId", user.getUserid());
             List<Usermatch> usermatches = usermatchMapper.selectByMap(conditionMap);
-
-            rankModel.setTotalScore(CollectionUtils.isEmpty(usermatches) ? 0 : usermatches.stream().mapToInt(Usermatch::getScore).sum());
-
+            //newest first
+            usermatches.sort(Comparator.comparingInt(match -> -match.getMatchId()));
+            int[] scores = usermatches.stream().mapToInt(x -> x.getScore()).toArray();
+            rankModel.setTotalScore(scoreAlgorithm.apply(scores));
+            rankModel.setRating(inverseRatingAlgorithm.apply(scores));
             result.add(rankModel);
         }
 
