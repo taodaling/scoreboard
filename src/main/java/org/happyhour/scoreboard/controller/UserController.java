@@ -26,7 +26,9 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Result<List<User>> getAllUser() {
-        return Result.ofSuccess(userService.getAllUser());
+        List<User> users = userService.getAllUser();
+        users.forEach(user -> user.setPassword(null));
+        return Result.ofSuccess(users);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -39,12 +41,16 @@ public class UserController {
         if (id == null) {
             throw new BizException("id can't be assigned with null value");
         }
-        return Result.ofSuccess(userService.getUser(id));
+        User user = userService.getUser(id);
+        user.setPassword(null);
+        return Result.ofSuccess(user);
     }
 
     @RequestMapping(value = "/self", method = RequestMethod.GET)
     public Result<User> getSelf() {
-        return Result.ofSuccess(userService.getUser(Context.getNotNullUser()));
+        User user = userService.getUser(Context.getNotNullUser());
+        user.setPassword(null);
+        return Result.ofSuccess(user);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
