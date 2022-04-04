@@ -35,7 +35,11 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
             }
             for (int j = 0; j > x; j--) {
                 index++;
-                rating -= 1d / index;
+                if (index <= K) {
+                    rating -= 2d / (1 + K);
+                } else {
+                    rating -= 1d / index;
+                }
             }
         }
         return (int) Math.round(rating * 1e3) + 1200;
