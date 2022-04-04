@@ -1,5 +1,6 @@
 package org.happyhour.scoreboard.service;
 
+import antlr.StringUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -33,6 +34,7 @@ public class UserService {
 
     public void updateUser(User user) {
         BizException.assertTrue(Objects.equals(Context.getNotNullUser(), user.getUserid()), "lack of permission");
+        BizException.assertTrue(user.getPassword() != null && user.getPassword().length() > 0, "password is empty");
         user.setPassword(encryptPassword(user.getPassword()));
         userMapper.updateById(user);
     }
