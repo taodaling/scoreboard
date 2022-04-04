@@ -10,9 +10,9 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
 
     public static void main(String[] args) {
         InverseRatingAlgorithm algo = new InverseRatingAlgorithm();
-        int[] data = new int[1000];
+        int[] data = new int[10000];
         for (int i = 0; i < data.length; i++) {
-            data[i] = i % 4 < 2 ? 1 : -1;
+            data[i] = i % 2 < 1 ? 1 : -1;
         }
         System.out.println(algo.apply(data));
     }
@@ -32,10 +32,10 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
             }
             for (int j = 0; j > x; j--) {
                 index++;
-                rating -= 0.5d / index;
+                rating -= 1d / index;
             }
         }
         rating = Math.max(0, rating);
-        return (int) Math.round(rating * 1e3);
+        return (int) Math.round(rating * 1e3) + 1200;
     }
 }
