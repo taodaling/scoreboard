@@ -12,7 +12,7 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
         InverseRatingAlgorithm algo = new InverseRatingAlgorithm();
         int[] data = new int[10000];
         for (int i = 0; i < data.length; i++) {
-            data[i] = i % 2 < 1 ? 1 : -1;
+            data[i] = i < 5 ? 1 : i % 2 == 0 ? 1 : -1;
         }
         System.out.println(algo.apply(data));
     }
