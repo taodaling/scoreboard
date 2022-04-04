@@ -19,6 +19,9 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
 
     @Override
     public Integer apply(int[] ints) {
+        if (ints.length == 0) {
+            return 0;
+        }
         double rating = 0;
         int index = 0;
         for (int x : ints) {
@@ -35,7 +38,6 @@ public class InverseRatingAlgorithm implements Function<int[], Integer> {
                 rating -= 1d / index;
             }
         }
-        rating = Math.max(0, rating);
         return (int) Math.round(rating * 1e3) + 1200;
     }
 }
