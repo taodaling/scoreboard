@@ -112,14 +112,7 @@ public class MatchService {
             result.add(rankModel);
         }
 
-
-
-        result.sort(new Comparator<RankModel>() {
-            @Override
-            public int compare(RankModel o1, RankModel o2) {
-                return o2.getTotalScore() - o1.getTotalScore();
-            }
-        });
+        result.sort(Comparator.comparing(RankModel::getRating).reversed());
         return result;
     }
 
