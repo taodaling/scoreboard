@@ -106,6 +106,12 @@ public class MatchService {
             //newest first
             usermatches.sort(Comparator.comparingInt(match -> -match.getMatchId()));
             int[] scores = usermatches.stream().mapToInt(x -> x.getScore()).toArray();
+
+            //Exclude users have no competition records
+            if(!Arrays.stream(scores).filter(x -> x != 0).findAny().isPresent()) {
+                continue;
+            }
+
             rankModel.setTotalScore(scoreAlgorithm.apply(scores));
             rankModel.setRating(inverseRatingAlgorithm.apply(scores));
             rankModel.setTrueSkill((int)Math.round(ratings.getOrDefault(user.getUserid(), 0D)));
