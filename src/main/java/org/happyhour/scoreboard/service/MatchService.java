@@ -93,7 +93,7 @@ public class MatchService {
                 .collect(Collectors.groupingBy(x -> x.getMatchId()));
         Map<Integer, List<Usermatch>> groupMatchByUserId = allMatch.stream()
                 .collect(Collectors.groupingBy(x -> x.getUserId()));
-        Map<Integer, Double> ratings = trueSkillAlgorithm.calcRating(new TreeMap<>(groupMatchByMatchId).values());
+        //Map<Integer, Double> ratings = trueSkillAlgorithm.calcRating(new TreeMap<>(groupMatchByMatchId).values());
 
 
         for (User user : allUsers) {
@@ -114,7 +114,7 @@ public class MatchService {
 
             rankModel.setTotalScore(scoreAlgorithm.apply(scores));
             rankModel.setRating(inverseRatingAlgorithm.apply(scores));
-            rankModel.setTrueSkill((int)Math.round(ratings.getOrDefault(user.getUserid(), 0D)));
+            //rankModel.setTrueSkill((int)Math.round(ratings.getOrDefault(user.getUserid(), 0D)));
             result.add(rankModel);
         }
 
